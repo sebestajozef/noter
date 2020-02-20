@@ -1,0 +1,27 @@
+{
+  "HomePage": {
+    "title": "Noter",
+    "language": "Language",
+    "noNotes": "There are no available notes"
+  },
+  "Form": {
+    "title": "Title",
+    "required": "Required"
+  },
+  "Snackbar": {
+    "noteUpdated": "Note was successfully updated",
+    "noteCreated": "Note was successfully created",
+    "noteDeleted": "Note was successfully deleted"
+  },
+  "Button": {
+    "detail": "Note detail",
+    "edit": "Edit the note",
+    "delete": "Delete the note",
+    "add": "Add a new note",
+    "apply": "Apply",
+    "cancel": "Cancel"
+  },
+  "Modal": {
+    "deleteConfirmText": "Are you sure you want to delete this note ?"
+  }
+}

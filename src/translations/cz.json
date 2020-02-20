@@ -1,0 +1,27 @@
+{
+  "HomePage": {
+    "title": "Poznámkovač",
+    "language": "Jazyk",
+    "noNotes": "Nejsou k dispozici žádné poznámky"
+  },
+  "Form": {
+    "title": "Nadpis",
+    "required": "Nutno vyplnit"
+  },
+  "Snackbar": {
+    "noteUpdated": "Poznámka byla úspěšně editována",
+    "noteDeleted": "Poznámka byla úspěšně smazána",
+    "noteCreated": "Poznámka byla úspěšně vytvořena"
+  },
+  "Button": {
+    "detail": "Detail poznámky",
+    "edit": "Editovat poznámku",
+    "delete": "Smazat poznámku",
+    "add": "Přidat poznámku",
+    "apply": "Použít",
+    "cancel": "Zrušit"
+  },
+  "Modal": {
+    "deleteConfirmText": "Opravdu chcete smazat danou poznámku ?"
+  }
+}
