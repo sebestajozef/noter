@@ -13,8 +13,23 @@ import Note from '../components/Note'
 import CreateNote from '../components/CreateNote'
 
 import '../assets/css/HomePage.less'
+import { NoteDataModel } from "../interfaces/NoteModel";
+import { RootState } from "../rootReducer";
 
-class _Homepage extends React.PureComponent {
+
+interface Props extends NoteDataModel {
+  notesListRequest: (() => void);
+  resetFlags: (() => void);
+  isDeleted: boolean;
+  isCreated: boolean;
+  isUpdated: boolean;
+  t: ((arg0: string) => string),
+  notesData: NoteDataModel[],
+  loading: boolean
+}
+
+
+class _Homepage extends React.PureComponent<Props> {
   componentDidMount() {
     this.props.notesListRequest()
   }
@@ -102,7 +117,7 @@ class _Homepage extends React.PureComponent {
 
 const Homepage = compose(
   connect(
-    reduxState => ({
+      (reduxState: RootState) => ({
       notesData: reduxState.notes.notesData,
       loading: reduxState.loadings.NOTES_LIST,
       isUpdated: reduxState.notes.isUpdated,

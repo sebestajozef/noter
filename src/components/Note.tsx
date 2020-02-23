@@ -26,8 +26,27 @@ import {
 } from '../models/notes/actions'
 
 import '../assets/css/Note.less'
+import { NoteDataModel } from "../interfaces/NoteModel";
+import { RootState } from "../rootReducer";
 
-class _Note extends React.PureComponent {
+
+interface Props extends NoteDataModel {
+  noteDetailRequest: ((arg0: number) => void);
+  noteDeleteRequest: ((arg0: number) => void);
+  noteUpdateRequest: ((arg0: number, arg1: string) => void);
+  noteData: NoteDataModel,
+  t: ((arg0: string) => string),
+  loading: boolean,
+}
+
+interface State {
+  detailModalOpen: boolean,
+  updateModalOpen: boolean,
+  deleteModalOpen: boolean,
+}
+
+
+class _Note extends React.PureComponent<Props, State> {
   state = {
     detailModalOpen: false,
     updateModalOpen: false,
@@ -149,7 +168,7 @@ class _Note extends React.PureComponent {
             <Formik
               initialValues={{title: this.props.title}}
               validate={values => {
-                const errors = {}
+                const errors: {title?: string} = {}
                 if (!values.title) {
                   errors.title = 'Required'
                 }
@@ -221,7 +240,7 @@ class _Note extends React.PureComponent {
 
 const Note = compose(
   connect(
-    reduxState => ({
+    (reduxState: RootState) => ({
       noteData: reduxState.notes.noteData,
       loading: reduxState.loadings.NOTE_DETAIL,
     }),

@@ -10,20 +10,37 @@ import {translate} from 'react-switch-lang'
 import {noteCreateRequest} from '../models/notes/actions'
 
 import '../assets/css/CreateNote.less'
+import { RootState } from "../rootReducer";
 
-class _CreateNote extends React.PureComponent {
+
+interface Props {
+  t: ((arg0: string) => string);
+  noteCreateRequest: ((arg0: string) => void),
+  loading: boolean,
+}
+
+interface initialValues {
+    title: string,
+}
+
+interface State {
+  initialValues: initialValues
+}
+
+
+class _CreateNote extends React.PureComponent<Props, State> {
   state = {
     initialValues: {title: ''},
   }
 
   render() {
-    const {t} = this.props
+    const {t, loading} = this.props
     return (
       <div className="create-note">
         <Formik
           initialValues={this.state.initialValues}
           validate={values => {
-            const errors = {}
+            const errors: {title?: string} = {}
             if (!values.title) {
               errors.title = t('Form.required')
             }
@@ -31,7 +48,7 @@ class _CreateNote extends React.PureComponent {
           }}
           onSubmit={(values, {resetForm}) => {
             this.props.noteCreateRequest(values.title)
-            resetForm(this.state.initialValues)
+            resetForm({})
           }}
         >
           {({handleSubmit}) => (
@@ -54,7 +71,7 @@ class _CreateNote extends React.PureComponent {
                       color="secondary"
                       type="submit"
                       size="large"
-                      disabled={!!this.props.loading}
+                      disabled={!!loading}
                     >
                       <AddIcon />
                     </Button>
@@ -71,7 +88,7 @@ class _CreateNote extends React.PureComponent {
 
 const CreateNote = compose(
   connect(
-    reduxState => ({
+      (reduxState: RootState) => ({
       loading: reduxState.loadings.NOTE_CREATE,
     }),
     {noteCreateRequest}
