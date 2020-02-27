@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {BrowserRouter as Router, Route} from 'react-router-dom'
 import {Provider} from 'react-redux'
 
@@ -24,8 +24,7 @@ setDefaultLanguage(Cookies.get('language') || 'en')
 
 setLanguageCookie()
 
-class _App extends Component {
-  render() {
+const _App: React.FunctionComponent = () => {
     return (
       <Provider store={store}>
         <Router>
@@ -33,7 +32,6 @@ class _App extends Component {
         </Router>
       </Provider>
     )
-  }
 }
 
 export default _App

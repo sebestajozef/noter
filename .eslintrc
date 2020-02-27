@@ -9,7 +9,12 @@
           "jsx": true
       }
     },
+    "plugins": [
+        "react-hooks"
+    ],
     "rules": {
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
         "comma-dangle": [2, "never"],
         "computed-property-spacing": [2, "never"],
         "no-cond-assign": 2,

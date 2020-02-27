@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FunctionComponent, useState } from 'react'
 import {
   Button,
   Modal,
@@ -39,204 +39,193 @@ interface Props extends NoteDataModel {
   loading: boolean,
 }
 
-interface State {
-  detailModalOpen: boolean,
-  updateModalOpen: boolean,
-  deleteModalOpen: boolean,
-}
+const _Note: FunctionComponent<Props> = props => {
+  const [detailModalOpen, setDetailModalOpen] = useState(false)
+  const [updateModalOpen, setUpdateModalOpen] = useState(false)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const {id, title, noteDetailRequest, noteUpdateRequest, noteDeleteRequest, noteData, t, loading} = props
 
-
-class _Note extends React.PureComponent<Props, State> {
-  state = {
-    detailModalOpen: false,
-    updateModalOpen: false,
-    deleteModalOpen: false,
+  const handleDetailModalOpen = () => {
+    setDetailModalOpen(true)
+    noteDetailRequest(id)
   }
 
-  handleDetailModalOpen = () => {
-    this.setState({detailModalOpen: true})
-    this.props.noteDetailRequest(this.props.id)
+  const handleDetailModalClose = () => {
+    setDetailModalOpen(false)
   }
 
-  handleDetailModalClose = () => {
-    this.setState({detailModalOpen: false})
+  const handleUpdateModalOpen = () => {
+    setUpdateModalOpen(true)
   }
 
-  handleUpdateModalOpen = () => {
-    this.setState({updateModalOpen: true})
+  const handleUpdateModalClose = () => {
+    setUpdateModalOpen(false)
   }
 
-  handleUpdateModalClose = () => {
-    this.setState({updateModalOpen: false})
+  const submitUpdate = title => {
+    noteUpdateRequest(id, title)
+    handleUpdateModalClose()
   }
 
-  submitUpdate = title => {
-    this.props.noteUpdateRequest(this.props.id, title)
-    this.handleUpdateModalClose()
+  const handleDeleteModalClose = () => {
+    setDeleteModalOpen(false)
   }
 
-  handleDeleteModalClose = () => {
-    this.setState({deleteModalOpen: false})
+  const handleDeleteModalOpen = () => {
+    setDeleteModalOpen(true)
   }
 
-  handleDeleteModalOpen = () => {
-    this.setState({deleteModalOpen: true})
+  const handleDelete = () => {
+    noteDeleteRequest(id)
+    handleDeleteModalClose()
   }
 
-  handleDelete = () => {
-    this.props.noteDeleteRequest(this.props.id)
-    this.handleDeleteModalClose()
-  }
-
-  render() {
-    const noteData = this.props.noteData
-    const {t} = this.props
-    return (
-      <div className="note">
-        <Box
-          display="flex"
-          alignItems="flex-start"
-          p={1}
-          m={1}
-          bgcolor="background.paper"
-          css={{maxWidth: 580}}
-        >
-          <Box width={'320px'}>{this.props.title}</Box>
-          <Box p={1}>
-            <Tooltip title={t('Button.detail')}>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={this.handleDetailModalOpen}
-              >
-                <SearchIcon />
-              </Button>
-            </Tooltip>
-          </Box>
-          <Box p={1}>
-            <Tooltip title={t('Button.edit')}>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={this.handleUpdateModalOpen}
-              >
-                <EditIcon />
-              </Button>
-            </Tooltip>
-          </Box>
-          <Box p={1}>
-            <Tooltip title={t('Button.delete')}>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={this.handleDeleteModalOpen}
-              >
-                <DeleteIcon />
-              </Button>
-            </Tooltip>
-          </Box>
+  return (
+    <div className="note">
+      <Box
+        display="flex"
+        alignItems="flex-start"
+        p={1}
+        m={1}
+        bgcolor="background.paper"
+        css={{maxWidth: 580}}
+      >
+        <Box width={'320px'}>{title}</Box>
+        <Box p={1}>
+          <Tooltip title={t('Button.detail')}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleDetailModalOpen}
+            >
+              <SearchIcon />
+            </Button>
+          </Tooltip>
         </Box>
-        <Modal
-          open={this.state.detailModalOpen}
-          onClose={this.handleDetailModalClose}
-          className="modal detail-modal"
-        >
-          {!!this.props.loading ? (
-            <CircularProgress />
-          ) : (
-            <div className="content">
-              <p>{noteData.title}</p>
-              <div className="action-buttons">
-                <Button
-                  autoFocus
-                  variant="outlined"
-                  onClick={this.handleDetailModalClose}
-                  color="primary"
-                >
-                  OK
-                </Button>
-              </div>
-            </div>
-          )}
-        </Modal>
-        <Modal
-          open={this.state.updateModalOpen}
-          onClose={this.handleUpdateModalClose}
-          className="modal update-modal"
-        >
+        <Box p={1}>
+          <Tooltip title={t('Button.edit')}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleUpdateModalOpen}
+            >
+              <EditIcon />
+            </Button>
+          </Tooltip>
+        </Box>
+        <Box p={1}>
+          <Tooltip title={t('Button.delete')}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleDeleteModalOpen}
+            >
+              <DeleteIcon />
+            </Button>
+          </Tooltip>
+        </Box>
+      </Box>
+      <Modal
+        open={detailModalOpen}
+        onClose={handleDetailModalClose}
+        className="modal detail-modal"
+      >
+        {!!loading ? (
+          <CircularProgress />
+        ) : (
           <div className="content">
-            <Formik
-              initialValues={{title: this.props.title}}
-              validate={values => {
-                const errors: {title?: string} = {}
-                if (!values.title) {
-                  errors.title = 'Required'
-                }
-                return errors
-              }}
-              onSubmit={values => {
-                this.submitUpdate(values.title)
-              }}
-            >
-              {({handleSubmit}) => (
-                <Form onSubmit={handleSubmit}>
-                  <FormControl className="title" required>
-                    <Field
-                      name="title"
-                      component={TextField}
-                      label={t('Form.title')}
-                    />
-                  </FormControl>
-                  <div className="action-buttons">
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      type="submit"
-                      className="space-from-left"
-                    >
-                      {t('Button.apply')}
-                    </Button>
-                    <Button
-                      onClick={this.handleUpdateModalClose}
-                      color="primary"
-                      variant="outlined"
-                    >
-                      {t('Button.cancel')}
-                    </Button>
-                  </div>
-                </Form>
-              )}
-            </Formik>
+            <p>{noteData.title}</p>
+            <div className="action-buttons">
+              <Button
+                autoFocus
+                variant="outlined"
+                onClick={handleDetailModalClose}
+                color="primary"
+              >
+                OK
+              </Button>
+            </div>
           </div>
-        </Modal>
-        <Dialog
-          maxWidth="xs"
-          open={this.state.deleteModalOpen}
-          onClose={this.handleDeleteModalClose}
-        >
-          <DialogContent>{t('Modal.deleteConfirmText')}</DialogContent>
-          <DialogActions className="delete-dialog-actions">
-            <Button
-              autoFocus
-              onClick={this.handleDeleteModalClose}
-              variant={'outlined'}
-              color="primary"
-            >
-              {t('Button.cancel')}
-            </Button>
-            <Button
-              onClick={this.handleDelete}
-              variant={'outlined'}
-              color="primary"
-            >
-              Ok
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    )
-  }
+        )}
+      </Modal>
+      <Modal
+        open={updateModalOpen}
+        onClose={handleUpdateModalClose}
+        className="modal update-modal"
+      >
+        <div className="content">
+          <Formik
+            initialValues={{title}}
+            validate={values => {
+              const errors: {title?: string} = {}
+              if (!values.title) {
+                errors.title = 'Required'
+              }
+              return errors
+            }}
+            onSubmit={values => {
+              submitUpdate(values.title)
+            }}
+          >
+            {({handleSubmit}) => (
+              <Form onSubmit={handleSubmit}>
+                <FormControl className="title" required>
+                  <Field
+                    name="title"
+                    component={TextField}
+                    label={t('Form.title')}
+                  />
+                </FormControl>
+                <div className="action-buttons">
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    type="submit"
+                    className="space-from-left"
+                  >
+                    {t('Button.apply')}
+                  </Button>
+                  <Button
+                    onClick={handleUpdateModalClose}
+                    color="primary"
+                    variant="outlined"
+                  >
+                    {t('Button.cancel')}
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </Modal>
+      <Dialog
+        maxWidth="xs"
+        open={deleteModalOpen}
+        onClose={handleDeleteModalClose}
+      >
+        <DialogContent>{t('Modal.deleteConfirmText')}</DialogContent>
+        <DialogActions className="delete-dialog-actions">
+          <Button
+            autoFocus
+            onClick={handleDeleteModalClose}
+            variant={'outlined'}
+            color="primary"
+          >
+            {t('Button.cancel')}
+          </Button>
+          <Button
+            onClick={handleDelete}
+            variant={'outlined'}
+            color="primary"
+          >
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  )
 }
+
 
 const Note = compose(
   connect(

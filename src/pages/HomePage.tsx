@@ -1,6 +1,6 @@
+import React, { FunctionComponent, useEffect } from 'react';
 import {connect} from 'react-redux'
 import {isEmpty} from 'lodash'
-import React from 'react'
 import {compose} from 'recompose'
 import {setLanguage, translate} from 'react-switch-lang'
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -29,22 +29,22 @@ interface Props extends NoteDataModel {
 }
 
 
-class _Homepage extends React.PureComponent<Props> {
-  componentDidMount() {
-    this.props.notesListRequest()
-  }
+const _Homepage: FunctionComponent<Props> = props => {
+  const {t, isUpdated, isCreated, isDeleted, notesData, resetFlags, loading, notesListRequest} = props
+  useEffect(() => {
+    notesListRequest()
+  }, [notesListRequest])
 
-  handleSetLanguage = key => () => {
+  const handleSetLanguage = (key:string) => () => {
     setLanguage(key)
   }
 
-  closeSnackbar = () => {
-    this.props.resetFlags()
+  const closeSnackbar = () => {
+    resetFlags()
   }
 
-  getSnackbarText = () => {
+  const getSnackbarText = () => {
     let txtVar
-    const {isDeleted, isUpdated, isCreated} = this.props
     if (!isDeleted && !isUpdated && !isCreated) {
       return ''
     }
@@ -55,64 +55,61 @@ class _Homepage extends React.PureComponent<Props> {
     } else if (isUpdated) {
       txtVar = 'Updated'
     }
-    return this.props.t(`Snackbar.note${txtVar}`)
+    return t(`Snackbar.note${txtVar}`)
   }
 
-  render() {
-    const {t} = this.props
-    const notesData = this.props.notesData
-    const snackbarText = this.getSnackbarText()
-    return (
-      <BasicLayout>
-        <div className="homepage">
-          <div className="upper-section">
-            <Snackbar
-              open={
-                this.props.isUpdated ||
-                this.props.isCreated ||
-                this.props.isDeleted
-              }
-              autoHideDuration={3000}
-              onClose={this.closeSnackbar}
-              anchorOrigin={{vertical: 'top', horizontal: 'center'}}
-              className="snackbar"
-            >
-              <Alert onClose={this.closeSnackbar} severity="success">
-                {snackbarText}
-              </Alert>
-            </Snackbar>
-            <Grid container spacing={3}>
-              <Grid item xs={6}>
-                <h1>{t('HomePage.title')}</h1>
-              </Grid>
-              <Grid item xs={6}>
-                <Button type="button" onClick={this.handleSetLanguage('en')}>
-                  EN
-                </Button>
-                <Button type="button" onClick={this.handleSetLanguage('cz')}>
-                  CZ
-                </Button>
-              </Grid>
+  const snackbarText = getSnackbarText()
+  return (
+    <BasicLayout>
+      <div className="homepage">
+        <div className="upper-section">
+          <Snackbar
+            open={
+              isUpdated ||
+              isCreated ||
+              isDeleted
+            }
+            autoHideDuration={3000}
+            onClose={closeSnackbar}
+            anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+            className="snackbar"
+          >
+            <Alert onClose={closeSnackbar} severity="success">
+              {snackbarText}
+            </Alert>
+          </Snackbar>
+          <Grid container spacing={3}>
+            <Grid item xs={6}>
+              <h1>{t('HomePage.title')}</h1>
             </Grid>
-            <CreateNote />
-          </div>
-          <div className="lower-section">
-            {!!this.props.loading ? (
-              <CircularProgress />
-            ) : !isEmpty(notesData) ? (
-              <React.Fragment>
-                {notesData.map(note => (
-                  <Note key={note.id} title={note.title} id={note.id} />
-                ))}
-              </React.Fragment>
-            ) : (
-              <div>{t('Homepage.noNotes')}</div>
-            )}
-          </div>
+            <Grid item xs={6}>
+              <Button type="button" onClick={handleSetLanguage('en')}>
+                EN
+              </Button>
+              <Button type="button" onClick={handleSetLanguage('cz')}>
+                CZ
+              </Button>
+            </Grid>
+          </Grid>
+          <CreateNote />
         </div>
-      </BasicLayout>
-    )
-  }
+        <div className="lower-section">
+          {!!loading ? (
+            <CircularProgress />
+          ) : !isEmpty(notesData) ? (
+            <React.Fragment>
+              {notesData.map(note => (
+                <Note key={note.id} title={note.title} id={note.id} />
+              ))}
+            </React.Fragment>
+          ) : (
+            <div>{t('Homepage.noNotes')}</div>
+          )}
+        </div>
+      </div>
+    </BasicLayout>
+  )
+
 }
 
 const Homepage = compose(

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FunctionComponent} from 'react';
 import {Field, Form, Formik} from 'formik'
 import {TextField} from 'formik-material-ui'
 import {Button, Grid, Tooltip, FormControl} from '@material-ui/core'
@@ -19,26 +19,13 @@ interface Props {
   loading: boolean,
 }
 
-interface initialValues {
-    title: string,
-}
 
-interface State {
-  initialValues: initialValues
-}
-
-
-class _CreateNote extends React.PureComponent<Props, State> {
-  state = {
-    initialValues: {title: ''},
-  }
-
-  render() {
-    const {t, loading} = this.props
+const _CreateNote: FunctionComponent<Props> = props => {
+    const {t, loading, noteCreateRequest} = props
     return (
       <div className="create-note">
         <Formik
-          initialValues={this.state.initialValues}
+          initialValues={{title: ""}}
           validate={values => {
             const errors: {title?: string} = {}
             if (!values.title) {
@@ -47,7 +34,7 @@ class _CreateNote extends React.PureComponent<Props, State> {
             return errors
           }}
           onSubmit={(values, {resetForm}) => {
-            this.props.noteCreateRequest(values.title)
+            noteCreateRequest(values.title)
             resetForm({})
           }}
         >
@@ -83,7 +70,7 @@ class _CreateNote extends React.PureComponent<Props, State> {
         </Formik>
       </div>
     )
-  }
+
 }
 
 const CreateNote = compose(
