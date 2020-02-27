@@ -17,78 +17,79 @@ import {
   RESET_FLAGS,
 } from './constants'
 
-export const notesListRequest = noteId => ({
+import {NoteActionTypes} from "./actions.interfaces";
+
+export const notesListRequest = ():NoteActionTypes => ({
   type: NOTES_LIST_REQUEST,
-  id: noteId,
 })
 
-export const notesListError = () => ({
+export const notesListError = ():NoteActionTypes => ({
   type: NOTES_LIST_ERROR,
 })
 
-export const notesListSuccess = data => ({
+export const notesListSuccess = (data):NoteActionTypes => ({
   type: NOTES_LIST_SUCCESS,
   notesData: data,
 })
 
-export const noteDetailRequest = noteId => ({
+export const noteDetailRequest = (noteId):NoteActionTypes => ({
   type: NOTE_DETAIL_REQUEST,
   id: noteId,
 })
 
-export const noteDetailError = () => ({
+export const noteDetailError = ():NoteActionTypes => ({
   type: NOTE_DETAIL_ERROR,
 })
 
-export const noteDetailSuccess = data => ({
+export const noteDetailSuccess = (data):NoteActionTypes => ({
   type: NOTE_DETAIL_SUCCESS,
   noteData: data,
 })
 
-export const noteUpdateRequest = (noteId, title) => ({
+export const noteUpdateRequest = (noteId, title):NoteActionTypes => ({
   type: NOTE_UPDATE_REQUEST,
   id: noteId,
   title: title,
 })
 
-export const noteUpdateError = () => ({
+export const noteUpdateError = ():NoteActionTypes => ({
   type: NOTE_UPDATE_ERROR,
 })
 
-export const noteUpdateSuccess = () => ({
+export const noteUpdateSuccess = ():NoteActionTypes => ({
   type: NOTE_UPDATE_SUCCESS,
   isUpdated: true,
 })
 
-export const noteDeleteRequest = noteId => ({
+export const noteDeleteRequest = (noteId):NoteActionTypes => ({
   type: NOTE_DELETE_REQUEST,
   id: noteId,
 })
 
-export const noteDeleteError = () => ({
+export const noteDeleteError = ():NoteActionTypes => ({
   type: NOTE_DELETE_ERROR,
 })
 
-export const noteDeleteSuccess = () => ({
+export const noteDeleteSuccess = ():NoteActionTypes => ({
   type: NOTE_DELETE_SUCCESS,
   isDeleted: true,
 })
 
-export const noteCreateRequest = title => ({
+export const noteCreateRequest = (title):NoteActionTypes => ({
   type: NOTE_CREATE_REQUEST,
   title: title,
 })
 
-export const noteCreateError = () => ({
+export const noteCreateError = ():NoteActionTypes => ({
   type: NOTE_CREATE_ERROR,
 })
 
-export const noteCreateSuccess = () => ({
+export const noteCreateSuccess = ():NoteActionTypes => ({
   type: NOTE_CREATE_SUCCESS,
   isCreated: true,
 })
 
-export const resetFlags = () => ({
+export const resetFlags = ():NoteActionTypes => ({
   type: RESET_FLAGS,
   isUpdated: false,
   isCreated: false,

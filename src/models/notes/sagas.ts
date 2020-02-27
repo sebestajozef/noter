@@ -30,7 +30,7 @@ export function* doNotesListRequest() {
       yield put(notesListSuccess(response.data))
     }
   } catch (error) {
-    yield put(notesListError(error))
+    yield put(notesListError())
   }
 }
 
@@ -45,7 +45,7 @@ export function* doNoteDetailRequest(action) {
       yield put(noteDetailSuccess(response.data))
     }
   } catch (error) {
-    yield put(noteDetailError(error))
+    yield put(noteDetailError())
   }
 }
 
@@ -63,7 +63,7 @@ export function* doNoteUpdateRequest(action) {
       yield put(notesListRequest())
     }
   } catch (error) {
-    yield put(noteUpdateError(error))
+    yield put(noteUpdateError())
   }
 }
 
@@ -79,7 +79,7 @@ export function* doNoteDeleteRequest(action) {
       yield put(notesListRequest())
     }
   } catch (error) {
-    yield put(noteDeleteError(error))
+    yield put(noteDeleteError())
   }
 }
 
@@ -97,7 +97,7 @@ export function* doNoteCreateRequest(action) {
       yield put(notesListRequest())
     }
   } catch (error) {
-    yield put(noteCreateError(error))
+    yield put(noteCreateError())
   }
 }
 

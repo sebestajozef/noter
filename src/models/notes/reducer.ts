@@ -7,15 +7,30 @@ import {
   RESET_FLAGS,
 } from './constants'
 
-const initialState = {
+import {NoteDataModel} from './../../interfaces/NoteModel'
+
+import {NoteActionTypes} from "./actions.interfaces";
+
+
+export type State = {
+  readonly isUpdated: boolean;
+  readonly isCreated: boolean;
+  readonly isDeleted: boolean;
+  readonly noteData: NoteDataModel;
+  readonly notesData: NoteDataModel[];
+};
+
+
+const initialState: State = {
   notesData: [],
-  noteData: {},
+  noteData: {id: 0, title: ""},
   isUpdated: false,
   isDeleted: false,
   isCreated: false,
 }
 
-const reducer = (state = initialState, action) => {
+
+const reducer = (state = initialState, action: NoteActionTypes) => {
   switch (action.type) {
     case NOTES_LIST_SUCCESS:
       return {

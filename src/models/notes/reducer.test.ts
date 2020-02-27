@@ -5,7 +5,7 @@ import reducer from './reducer'
 
 const state = {
   notesData: [],
-  noteData: {},
+  noteData: {id: 0, title: ""},
   isUpdated: false,
   isDeleted: false,
   isCreated: false,
@@ -25,7 +25,7 @@ describe('notes reducer', () => {
     ]
     const newState = reducer(state, notesListSuccess(data))
     expect(newState.notesData).to.deep.equal(data)
-    expect(newState.noteData).to.deep.equal({})
+    expect(newState.noteData).to.deep.equal({id: 0, title: ""})
     expect(newState.isUpdated).to.deep.equal(false)
     expect(newState.isDeleted).to.deep.equal(false)
     expect(newState.isCreated).to.deep.equal(false)
@@ -42,14 +42,14 @@ describe('notes reducer', () => {
   it('resets flags when action resetFlags is invoked', () => {
     const defaultState = {
       notesData: [],
-      noteData: {},
+      noteData: {id: 0, title: ""},
       isUpdated: true,
       isDeleted: true,
       isCreated: false,
     }
     const newState = reducer(defaultState, resetFlags())
     expect(newState.notesData).to.deep.equal([])
-    expect(newState.noteData).to.deep.equal({})
+    expect(newState.noteData).to.deep.equal({id: 0, title: ""})
     expect(newState.isUpdated).to.deep.equal(false)
     expect(newState.isDeleted).to.deep.equal(false)
     expect(newState.isCreated).to.deep.equal(false)

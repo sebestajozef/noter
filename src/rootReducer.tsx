@@ -7,3 +7,5 @@ export const rootReducer = combineReducers({
   notes: notesReducer,
   loadings: loadingSharedReducer,
 })
+
+export type RootState = ReturnType<typeof rootReducer>

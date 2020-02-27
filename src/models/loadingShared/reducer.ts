@@ -1,4 +1,14 @@
-const reducer = (state = {}, action) => {
+import {NoteActionTypes} from "./../notes/actions.interfaces";
+
+export type State = {
+  [Key: string]: boolean
+};
+
+const initialState: State = {
+}
+
+
+const reducer = (state = initialState, action: NoteActionTypes) => {
   const {type} = action
   const matches = /(.*)_(REQUEST|SUCCESS|ERROR)/.exec(type)
   // not a *_REQUEST / *_SUCCESS /  *_ERROR actions, so we ignore them
